@@ -2,7 +2,7 @@ import urllib.parse
 import requests
 
 main_api = "https://www.mapquestapi.com/directions/v2/route?"
-key = "JqOw2xegoXrBhbNDflPICU6YTNmIxtF4" 
+key = "NGO5fCSo59YyPyHEbC3q01BKlhM9knpU" 
 
 
 
