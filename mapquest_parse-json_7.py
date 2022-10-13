@@ -1,9 +1,10 @@
 import urllib.parse
-from itsdangerous import json
 import requests
 
 main_api = "https://www.mapquestapi.com/directions/v2/route?"
 key = "NGO5fCSo59YyPyHEbC3q01BKlhM9knpU" 
+
+
 
 while True:
     orig = input("Starting Location: ")
