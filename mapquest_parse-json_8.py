@@ -27,7 +27,7 @@ while True:
         print(Fore.BLUE + "Directions from " + (orig) + " to " + (dest))
         print(Fore.BLUE + "Trip Duration:   " + (json_data["route"]["formattedTime"]))
         print(Fore.BLUE + "Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))
-        print(Fore.BLUE + "Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
+        #print(Fore.BLUE + "Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
         #function to check if there is toll road
         def myFunction(): 
             if json_data["route"]["hasTollRoad"] == 1:
@@ -35,6 +35,23 @@ while True:
             else:
                 return Fore.BLUE + "No"
         print(Fore.BLUE + "Has Toll Road:  ",myFunction())
+
+        #Additional Road Information
+        #function to check if there is highway
+        def myHighway():
+            if json_data["route"]["hasHighway"] == 1:
+                return Fore.BLUE + "Yes"
+            else:
+                return Fore.BLUE + "No"
+        print(Fore.BLUE + "Has Highway:    ", myHighway())
+
+        #function to check if there is seasonal closure
+        def seasonalClosure():
+            if json_data["route"]["hasSeasonalClosure"] == 1:
+                return Fore.BLUE + "Yes"
+            else:
+                return Fore.BLUE + "No"
+        print(Fore.BLUE + "Has Seasonal Closure:  ", seasonalClosure());
         
         print("=============================================")
         for each in json_data["route"]["legs"][0]["maneuvers"]:
