@@ -18,16 +18,42 @@ while True:
     json_data = requests.get(url).json()
     json_status = json_data["info"]["statuscode"]
     if json_status == 0:
-        print("API Status: " + str(json_status) + " = A successful route call.\n")
-        print("=============================================")
-        print("Directions from " + (orig) + " to " + (dest))
-        print("Trip Duration:   " + (json_data["route"]["formattedTime"]))
-        print("Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))
-        print("Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
-        print("=============================================")
-        for each in json_data["route"]["legs"][0]["maneuvers"]:
-            print((each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])*1.61) + " km)"))
-        print("=============================================\n")
+        disp = input("Display data in: \n (I) Imperial System - Miles / Gallons. \n (M) Metric System - Kilometers / Liters. \n (I) or (M): ")
+        if disp == "I" or disp == "i":
+            print("API Status: " + str(json_status) + " = A successful route call.\n")
+            print("=============================================")
+            print("Directions from " + (orig) + "to " + (dest))
+            print("Trip Duration:   " + (json_data["route"]["formattedTime"]))
+            print("Miles:      " + str("{:.2f}".format((json_data["route"]["distance"]))))
+            print("Fuel Used (gal): " + str("{:.2f}".format((json_data["route"]["fuelUsed"]))))
+            print("=============================================")
+            count = 1
+            for each in json_data["route"]["legs"][0]["maneuvers"]:
+                print(str(count) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])) + " miles)"))
+                count += 1
+            print("=============================================\n")
+        
+        if disp == "M" or disp == "m":
+            print("API Status: " + str(json_status) + " = A successful route call.\n")
+            print("=============================================")
+            print("Directions from " + (orig) + "to " + (dest))
+            print("Trip Duration:   " + (json_data["route"]["formattedTime"]))
+            print("Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))
+            print("Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
+            print("=============================================")
+            count = 1
+            for each in json_data["route"]["legs"][0]["maneuvers"]:
+                print(str(count) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])*1.61) + " km)"))
+                count += 1
+            print("=============================================\n")
+            
+        # print("=============================================")
+        
+        # count = 1
+        # for each in json_data["route"]["legs"][0]["maneuvers"]:
+        #     print(str(count) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])*1.61) + " km)"))
+        #     count += 1
+        # print("=============================================\n")
     elif json_status == 402:
         print("**********************************************")
         print("Status Code: " + str(json_status) + "; Invalid user inputs for one or both locations.")

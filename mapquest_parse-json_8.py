@@ -8,14 +8,19 @@ colorama.init(autoreset=True)
 main_api = "https://www.mapquestapi.com/directions/v2/route?"
 key = "NGO5fCSo59YyPyHEbC3q01BKlhM9knpU" 
 
-
-
 while True:
     orig = input(Fore.CYAN + "Starting Location: ")
     if orig == "quit" or orig == "q":
         break
     dest = input(Fore.CYAN + "Destination: ")
     if dest == "quit" or dest == "q":
+        break
+    
+    #define metrics input if KM / Liters or Miles /Gallons
+    Metrics = input("What metrics do you choose? Press M for miles and gallons, Press K for kilometers and liters: ")
+    if Metrics != "m" and Metrics != "k" and Metrics != "M" and Metrics != "K":
+        print("Please choose either M or K")
+        print("=============TERMINATING PROGRAM=============")
         break
     url = main_api + urllib.parse.urlencode({"key":key, "from":orig, "to":dest})
     print(Fore.GREEN + "URL: " + (url))
@@ -27,7 +32,7 @@ while True:
         print(Fore.BLUE + "Directions from " + (orig) + " to " + (dest))
         print(Fore.BLUE + "Trip Duration:   " + (json_data["route"]["formattedTime"]))
         print(Fore.BLUE + "Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))
-        #print(Fore.BLUE + "Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
+        print(Fore.BLUE + "Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
         #function to check if there is toll road
         def myFunction(): 
             if json_data["route"]["hasTollRoad"] == 1:
@@ -54,9 +59,19 @@ while True:
         print(Fore.BLUE + "Has Seasonal Closure:  ", seasonalClosure());
         
         print("=============================================")
+        #adding numbers for direction while checking metric choice
+        count = 1
         for each in json_data["route"]["legs"][0]["maneuvers"]:
-            print((Fore.CYAN + each["narrative"]) + " (" + str("{:.2f}".format((each[ "distance"])*1.61) + " km)"))
+            if Metrics == "M" or Metrics == "m":
+                print(Fore.CYAN + str(count), ": ", end='')
+                print((Fore.CYAN + each["narrative"]) + " (" + str("{:.2f}".format((each[ "distance"])) + " miles)"))
+                count = count + 1
+            elif Metrics == "K" or Metrics == "k":
+                print(Fore.CYAN + str(count), ": ", end='')
+                print((Fore.CYAN + each["narrative"]) + " (" + str("{:.2f}".format((each[ "distance"])*1.61) + " km)"))
+                count = count + 1
         print("=============================================\n")
+    #handling errors for MapQuest API
     elif json_status == 402:
         print("**********************************************")
         print(Fore.RED + "Status Code: " + str(json_status) + "; Invalid user inputs for one or both locations.")
