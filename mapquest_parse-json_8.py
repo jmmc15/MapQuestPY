@@ -2,11 +2,13 @@ import urllib.parse
 import requests
 import colorama
 from colorama import Fore, Back, Style
+from datetime import datetime, timedelta
 
 colorama.init(autoreset=True)
 
 main_api = "https://www.mapquestapi.com/directions/v2/route?"
 key = "NGO5fCSo59YyPyHEbC3q01BKlhM9knpU" 
+current_time = datetime.now().strftime("%I:%M%p") #added current_time for ETA feature
 
 while True:
     orig = input(Fore.CYAN + "Starting Location: ")
@@ -27,12 +29,19 @@ while True:
     json_data = requests.get(url).json()
     json_status = json_data["info"]["statuscode"]
     if json_status == 0:
+        #Getting trip duration from API and formatting with current time for ETA
+        str_time = json_data["route"]["formattedTime"]
+        total_time = str_time.replace(":","")
+        eta = datetime.now() + timedelta(seconds=int(total_time))
+        eta = eta.strftime("%I:%M%p")
+
         print(Fore.GREEN + "API Status: " + str(json_status) + " = A successful route call.\n")
         print("=============================================")
         print(Fore.BLUE + "Directions from " + (orig) + " to " + (dest))
         print(Fore.BLUE + "Trip Duration:   " + (json_data["route"]["formattedTime"]))
         print(Fore.BLUE + "Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))
-        print(Fore.BLUE + "Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
+
+        # print(Fore.BLUE + "Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
         #function to check if there is toll road
         def myFunction(): 
             if json_data["route"]["hasTollRoad"] == 1:
@@ -56,7 +65,11 @@ while True:
                 return Fore.BLUE + "Yes"
             else:
                 return Fore.BLUE + "No"
-        print(Fore.BLUE + "Has Seasonal Closure:  ", seasonalClosure());
+        print(Fore.BLUE + "Has Seasonal Closure:  ", seasonalClosure())
+
+        #Estimated Time of Arrival
+        print(Fore.BLUE + "Trip Duration:   " + (json_data["route"]["formattedTime"]))
+        print(Fore.BLUE + f"Current time is {current_time}. If you start driving now, you'll reach {dest} at around {eta}")
         
         print("=============================================")
         #adding numbers for direction while checking metric choice
