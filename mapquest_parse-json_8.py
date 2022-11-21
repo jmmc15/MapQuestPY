@@ -31,15 +31,8 @@ while True:
         print("=============================================")
         print(Fore.BLUE + "Directions from " + (orig) + " to " + (dest))
         print(Fore.BLUE + "Trip Duration:   " + (json_data["route"]["formattedTime"]))
-        #check user input for metrics choice
-        if Metrics == "M" or Metrics == "m":
-            print(Fore.BLUE + "Miles:      " + str("{:.2f}".format((json_data["route"]["distance"]))))
-        elif Metrics == "K" or Metrics == "k":  
-            print(Fore.BLUE + "Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))
-        if Metrics == "M" or Metrics == "m":
-            print(Fore.BLUE + "Fuel Used (Gal): " + str("{:.2f}".format((json_data["route"]["fuelUsed"]))))
-        elif Metrics == "K" or Metrics == "k":
-            print(Fore.BLUE + "Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
+        print(Fore.BLUE + "Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))
+        print(Fore.BLUE + "Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
         #function to check if there is toll road
         def myFunction(): 
             if json_data["route"]["hasTollRoad"] == 1:
@@ -47,6 +40,23 @@ while True:
             else:
                 return Fore.BLUE + "No"
         print(Fore.BLUE + "Has Toll Road:  ",myFunction())
+
+        #Additional Road Information
+        #function to check if there is highway
+        def myHighway():
+            if json_data["route"]["hasHighway"] == 1:
+                return Fore.BLUE + "Yes"
+            else:
+                return Fore.BLUE + "No"
+        print(Fore.BLUE + "Has Highway:    ", myHighway())
+
+        #function to check if there is seasonal closure
+        def seasonalClosure():
+            if json_data["route"]["hasSeasonalClosure"] == 1:
+                return Fore.BLUE + "Yes"
+            else:
+                return Fore.BLUE + "No"
+        print(Fore.BLUE + "Has Seasonal Closure:  ", seasonalClosure());
         
         print("=============================================")
         #adding numbers for direction while checking metric choice
